@@ -12,25 +12,26 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 import os 
+import environ
+from django.core.exceptions import ImproperlyConfigured
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
-import environ
-import os
-
-env = environ.Env()
-environ.Env.read_env()
+# Initialize Env and read the .env file
+env = environ.Env(
+    # set casting, default value
+    DEBUG=(bool, False)
+)
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-(8#o5xsrq9!)t6aaz^r(5p1v)p-y#n7=-(u%6-u)0udijo#)1h'
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+SECRET_KEY = env('STRIPE_SECRET_KEY')
+DEBUG=True
 
-ALLOWED_HOSTS = []
+# Hosts that are allowed to serve the site.
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['127.0.0.1', 'localhost'])
 
 SITE_ID = 1
 
@@ -47,7 +48,7 @@ INSTALLED_APPS = [
 
     # local apps
     'accounts',
-    'marketplace.apps.MarketplaceConfig', # Or just 'marketplace'
+    'marketplace', # Or just 'marketplace'
 
 ]
 
@@ -67,7 +68,7 @@ ROOT_URLCONF = 'core.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -149,9 +150,9 @@ LOGIN_URL = '/login'
 
 
 # In your settings.py
-STRIPE_PUBLISHABLE_KEY = 'pk_test_51Q8nKP0253g8W7WoBMMcQ5PkGmjNAFUIr51KC2Dipe5082nZtE8hXohqDVHewce2YUZMyMvOr46hrLHrdhDIt4dq001WQCOyAG'
+STRIPE_PUBLISHABLE_KEY="pk_test_51Q8nKP0253g8W7WoBMMcQ5PkGmjNAFUIr51KC2Dipe5082nZtE8hXohqDVHewce2YUZMyMvOr46hrLHrdhDIt4dq001WQCOyAG"
 STRIPE_SECRET_KEY = env("STRIPE_SECRET_KEY")
-STRIPE_WEBHOOK_SECRET = 'whsec_e1140bd1f212e90b662a619c8b029ce42754279b3f674c8e77f31ce2937d03cb' # Get this after creating a webhook endpoint
+STRIPE_WEBHOOK_SECRET="whsec_e1140bd1f212e90b662a619c8b029ce42754279b3f674c8e77f31ce2937d03cb"
 
 
 # CashstronomyClo/settings.py
@@ -165,9 +166,10 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = os.environ.get('djangomailahmad@gmail.com') # Your Gmail address
-EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASS') # Your Gmail App Password
+EMAIL_HOST_USER="your-email@gmail.com"
+EMAIL_HOST_PASSWORD="your-google-app-password"
 
 # Default emails
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 CONTACT_EMAIL = 'ahmadkashifpool@gmail.com' # The email that receives contact form submissions
+
