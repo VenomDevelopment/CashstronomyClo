@@ -1,0 +1,267 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cashstronomy - Shop</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" 
+        rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="{% static 'img/favicon2.svg' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+
+    <header class="header_section"> 
+        <div class="container">
+            <div class="header_inner_main">
+                <nav class="navbar navbar-expand-lg navbar-dark">
+                    <div class="container-fluid">
+                        <a class="navbar-brand" href="{% url 'marketplace:home' %}"><img src="{% static 'img/logo.svg' %}" alt=""></a>
+                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                        </button>
+                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                            <ul class="navbar-nav mx-auto mb-2 mb-lg-0 gap-4">
+                                <li class="nav-item">
+                                    <a aria-current="page" class="nav-link " href="{% url 'marketplace:home' %}">HOME</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link active" href="{% url 'marketplace:shop' %}">Shop</a>
+                                </li>
+                               <!-- <li class="nav-item">
+                                    <a class="nav-link" href="#">Accessories</a>
+                                </li> -->
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{% url 'marketplace:faqs' %}">FAQ</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{% url 'marketplace:privacy' %}">Privacy Policy</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{% url 'marketplace:home' %}#Contact">CONTACT</a>
+                                </li>
+                            </ul>
+                            <div class="navbtn_main">
+                                <a href="{% url 'marketplace:cart' %}"><button type="button" class="navbtn"><img src="{% static 'img/nav1.svg' %}" alt=""></button></a>
+                                <!-- <button type="button" class="navbtn"><img src="{% static 'img/nav2.svg' %}" alt=""></button> -->
+                                <button type="button" class="navbtn d-none"><img src="{% static 'img/nav3.svg' %}" alt=""></button>
+                                {% if user.is_authenticated %}
+                                    <a href="{% url 'accounts:logout' %}"><button type="button" class="login_btn">Logout</button></a>
+                                {% else %}
+                                    <a href="{% url 'accounts:login' %}"><button type="button" class="login_btn">Login</button></a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <section class="shop_hero_section">
+        <div class="container">
+            <div class="shop_hero_txt">
+                <h1>Shop</h1>
+                <p>Home / Featured Collection</p>
+            </div>
+
+        </div>
+    </section>
+
+    <section class="shop_section_one">
+        <div class="container">
+            <div class="shop_sec1_topbar_main">
+                <div class="shop_sec1_topbar_tabs">
+                    <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                        <li class="nav-item">
+                            <a style="text-decoration: none;" href="{% url 'marketplace:shop' %}">
+                                <button aria-selected="{% if not selected_category %}true{% else %}false{% endif %}" aria-controls="pills-shop-all" role="tab" type="button" data-bs-target="#pills-shop-all" data-bs-toggle="pill" id="pills-shop-all-tab" class="nav-link {% if not selected_category %}active{% endif %}">
+                                    <span>All</span>
+                                </button>
+                            </a>
+                        </li>
+                        {% for category in categories %}
+                        <li class="nav-item">
+                            <a style="text-decoration: none;" href="?category={{ category.name }}">
+                                <button aria-selected="{% if selected_category|lower == category.name|lower %}true{% else %}false{% endif %}" 
+                                        aria-controls="pills-shop-{{ category.name|slugify }}" role="tab" type="button" 
+                                        data-bs-target="#pills-shop-{{ category.name|slugify }}" data-bs-toggle="pill" 
+                                        id="pills-shop-{{ category.name|slugify }}-tab" class="nav-link {% if selected_category|lower == category.name|lower %}active{% endif %}">
+                                    <span>{{ category.name }}</span>
+                                </button>
+                            </a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="shop_topbar_right_main">
+                    <!-- <div class="shop_topbar_select">
+                        <select class="form-select">
+                            <option value="" selected disabled>SORT BY</option>
+                            <option value="">OPTION 1</option>
+                            <option value="">OPTION 2</option>
+                            <option value="">OPTION 3</option>
+                        </select>
+                    </div> -->
+                    <!-- <div class="shop_topbar_view_icons">
+                        <a href="#"><img src="{% static 'img/view1.svg' %}" alt=""></a>
+                        <a href="#" class="active"><img src="{% static 'img/view2.svg' %}" alt=""></a>
+                        <a href="#"><img src="{% static 'img/view3.svg' %}" alt=""></a>
+                    </div>
+                    <div class="shop_topbar_view_btns">
+                        <button type="button"><img src="{% static 'img/search.svg' %}" alt=""></button>
+                        <button type="button"><img src="{% static 'img/filter.svg' %}" alt=""></button>
+                    </div> -->
+                </div>
+            </div>
+            <div class="shop_sec1_tabs_content_main">
+                <div class="shop_tab_content_inner">
+                    <div class="row">
+                        {% for product in products %}
+                        <div class="col-lg-3 col-md-4 col-sm-6">
+                            <div class="home_sec3_card_body">
+                                <a href="{% url 'marketplace:product_details' product.id %}">
+                                    <div class="home_sec1_card_img">
+                                        {% if product.main_image_url %}
+                                            <img src="{{ product.main_image_url }}" alt="{{ product.name }}">
+                                        {% else %}
+                                            <img src="{% static 'img/placeholder.png' %}" alt="Placeholder image">
+                                        {% endif %}
+                                    </div>
+                                </a>
+                                {% if product.tag %}
+                                <button type="button" id="s3_tag_btn1" class="s3_tag_btn1">{{ product.tag }}</button>
+                                {% endif %}
+                                <button class="favorite-btn"><i class="bi bi-heart"></i></button>
+                                <form action="{% url 'marketplace:add_to_cart' %}" method="POST" style="display: inline;">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="product_id" value="{{ product.id }}">
+                                    <button type="submit" class="cart_btn"><img src="{% static 'img/cart.svg' %}" alt="Add to cart"></button>
+                                </form>
+                                <div class="home_sec3_txt_div">
+                                    <a href="{% url 'marketplace:product_details' product.id %}" style="text-decoration: none; color: inherit;">
+                                        <h5>{{ product.name }}</h5>
+                                    </a>
+                                    <p>${{ product.price|floatformat:2 }}</p>
+                                </div>
+                                <p class="sec3_card_rating"><img src="{% static 'img/star2.svg' %}" alt=""> {{ product.average_rating|floatformat:1|default:'N/A' }} <span>({{ product.review_count }} Review{{ product.review_count|pluralize }})</span></p>
+                            </div>
+                        </div>
+                        {% empty %}
+                        <div class="col-12">
+                            <p class="text-center">No products found in this category.</p>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% if products.has_other_pages %}
+                <button class="loadmore_btn" type="button">Load More <i class="bi bi-arrow-clockwise spin"></i></button>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+<!-- 
+    <section class="get_lattest_section">
+        <div class="container">
+            <div class="get_lattest_inner">
+                <h3>Get The Latest Trends First</h3>
+                <input type="text" placeholder="Enter Your Email">
+                <div class="get_lattest_links">
+                    <a href="#">Facebook</a>
+                    <a href="#">Instagram</a>
+                    <a href="#">Twitter</a>
+                    <a href="#">YouTube</a>
+                    <a href="#">TikTok </a>
+                </div>
+            </div>
+        </div>
+    </section> -->
+
+    <section class="footer_section">
+        <div class="container">
+            <div class="footer_top_txt_main">
+                <div class="footer_top_txt_inner">
+                    <h5>Your Next Look Starts Here</h5>
+                    <h1>Shop the latest collections and own the season.</h1>
+                </div>
+                <div class="footer_top_btns">
+                    <a href="{% url 'marketplace:shop' %}"><button type="button">Shop Now <i class="bi bi-arrow-right"></i></button></a>
+                    <button type="button"><a style="text-decoration: none; color: inherit" href="{% url 'marketplace:home' %}#Contact">Join the Club</a></button>
+                </div>
+            </div>
+            <div class="footer_second_main">
+                <div class="row justify-content-between">
+                    <div class="col-lg-3 col-md-4 col-sm-12">
+                        <div class="footer_sec_txt1">
+                            <img src="{% static 'img/logo2.svg' %}" alt="">
+                            <p>We are a fashion-forward brand dedicated to bringing you timeless designs and modern trends. From everyday essentials to statement pieces.</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-8 col-md-8 col-sm-12">
+                        <div class="row">
+                            <div class="col-lg-3 col-md-6 col-sm-6">
+                                <div class="footer_links_inner">
+                                    <h5>Shop</h5>
+                                    <a href="{% url 'marketplace:shop' %}">All</a>
+                                    <a href="{% url 'marketplace:shop' %}?category=Men">Men</a>
+                                    <a href="{% url 'marketplace:shop' %}?category=Women">Women</a>
+                                    <a href="{% url 'marketplace:shop' %}?category=Accessories">Accessories</a>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-6 col-sm-6">
+                                 <div class="footer_links_inner">
+                                    <h5>Customer Care</h5>
+                                    <a href="{% url 'marketplace:home' %}#Contact">Contach Us</a>
+                                    <a href="{% url 'marketplace:faqs' %}">Shipping & Returns</a>
+                                    <!-- <a href="#">Size Guide</a> -->
+                                    <a href="{% url 'marketplace:faqs' %}">FAQs</a>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-6 col-sm-6">
+                                 <div class="footer_links_inner">
+                                    <h5>About</h5>
+                                    <a href="{% url 'marketplace:privacy' %}">Privacy Policy</a>
+                                    <a href="{% url 'marketplace:terms' %}">Terms of Service</a>
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-md-6 col-sm-6">
+                                 <div class="footer_links_inner">
+                                    <h5>Follow Us</h5>
+                                    
+                                    <a href="https://www.pinterest.com/pandaworld0598/">Pintrest</a>
+                                    <a href="https://www.instagram.com/cashstronomy.clothing.inc/">Instagram</a>
+                                    <a href="https://www.tiktok.com/@Cashstronomy">TikTok</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer_last_main">
+                <p>© 2024 CashstronomyClo. All rights reserved.</p>
+                <div class="footer_last_inner">
+                    <a href="privacy.html">Privacy Policy</a>
+                    <a href="terms.html">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" 
+    integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous">
+    </script>
+    <script src="{% static 'js/script.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            duration: 1200,
+        });
+    </script>
+    
+</body>
+</html>

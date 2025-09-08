@@ -1,0 +1,270 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cashstronomy - Order Confirmation</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" 
+        rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="{% static 'img/favicon2.svg' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+
+    <header class="header_section"> 
+        <div class="container">
+            <div class="header_inner_main">
+                <nav class="navbar navbar-expand-lg navbar-dark">
+                    <div class="container-fluid">
+                        <a class="navbar-brand" href="{% url 'marketplace:home' %}"><img src="{% static 'img/logo.svg' %}" alt=""></a>
+                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                        </button>
+                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                            <ul class="navbar-nav mx-auto mb-2 mb-lg-0 gap-4">
+                                <li class="nav-item">
+                                    <a aria-current="page" class="nav-link" href="{% url 'marketplace:home' %}">HOME</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{% url 'marketplace:shop' %}">Shop</a>
+                                </li>
+                               <!-- <li class="nav-item">
+                                    <a class="nav-link" href="#">Accessories</a>
+                                </li> -->
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{% url 'marketplace:faqs' %}">FAQ</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{% url 'marketplace:privacy' %}">Privacy Policy</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{% url 'marketplace:terms' %}">Terms of Service</a>
+                            </ul>
+                            <div class="navbtn_main">
+                                <a href="{% url 'marketplace:cart' %}"><button type="button" class="navbtn"><img src="{% static 'img/nav1.svg' %}" alt=""></button></a>
+                                <!-- <button type="button" class="navbtn"><img src="{% static 'img/nav2.svg' %}" alt=""></button> -->
+                                <button type="button" class="navbtn d-none"><img src="{% static 'img/nav3.svg' %}" alt=""></button>
+                                {% if user.is_authenticated %}
+                                    <a href="{% url 'accounts:logout' %}"><button type="button" class="login_btn">Logout</button></a>
+                                {% else %}
+                                    <a href="{% url 'accounts:login' %}"><button type="button" class="login_btn">Login</button></a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <section class="shop_hero_section" id="order_hero">
+        <div class="container">
+            <div class="shop_hero_txt">
+                <h1>Order Complete</h1>
+                <p>Home / Order Confirmation</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="orderconf_section_one">
+        <div class="container">
+            <div class="ordconf_title">
+                <i class="bi bi-check-circle-fill"></i>
+                <h3>Your order is complete</h3>
+                <p>Thank you. Your Order has been received</p>
+            </div>
+            <div class="orderconf_sec1_card1_main">
+                <div class="orderconf_sec1_card1_inner">
+                    <p>Order ID</p>
+                    <h6>#{{ order.id|stringformat:"08d" }}</h6>
+                </div>
+                <div class="orderconf_sec1_card1_inner">
+                    <p>Payment Method</p>
+                    <h6>Card Payment (Stripe)</h6>
+                </div>
+                <div class="orderconf_sec1_card1_inner">
+                    <p>Order Date</p>
+                    <h6>{{ order.created_at|date:"d M, Y" }}</h6>
+                </div>
+                <div class="orderconf_sec1_card1_inner">
+                    <p>Estimated Delivery Date</p>
+                    <h6>{% if order.delivery_date %}
+                        {{ order.delivery_date|date:"d M, Y" }}
+                    {% else %}
+                        Not yet determined
+                    {% endif %}</h6>
+                </div>
+                <!-- <div class="orderconf_sec1_card1_inner">
+                    <button type="button">Download Invoice</button>
+                </div> -->
+            </div>
+            <h3 class="Ordertitle">Order Details</h3>
+            <div class="orderconf_sec1_card2_main">
+                <div class="orderconf_sec1_card2_inner1">
+                    <h5>Products</h5>
+                    <h5>Sub Total </h5>
+                </div> 
+                <div class="orderconf_sec1_card2_inner2_main">
+                    {% for item in order.items.all %}
+                    <div class="orderconf_sec1_card2_inner2">
+                        <div class="orderconf_sec1_card2_profile">
+                            <img src="{{ item.product.main_image_url|default_if_none:'' }}" alt="{{ item.product.name }}">
+                            <div class="orderconf_sec1_card2_profile_txt">
+                                <h5>{{ item.product.name }}</h5>
+                                {% if item.color %}<p>Color: {{ item.color }}</p>{% endif %}
+                                {% if item.size %}<p>Size: {{ item.size }}</p>{% endif %}
+                            </div>
+                        </div>
+                        <div class="orderconf_sec1_card2_profile_txt2">
+                            <h6>${{ item.price|floatformat:2 }}</h6>
+                            <span>x{{ item.quantity }}</span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="orderconf_sec1_card3_main">
+                <div class="order_card3_inner">
+                    <p>
+                        <b>Shipping</b>
+                        <strong>Free</strong>
+                    </p>
+                    <p>
+                        <b>Taxes</b>
+                        <strong>$00.00</strong>
+                    </p>
+                    <!-- <p>
+                        <b>Coupon Discount</b>
+                        <strong>-$50.00</strong>
+                    </p> -->
+                </div>
+                <p class="order_card3_inner2">
+                    <b>Total</b>
+                    <strong>${{ order.total_price|floatformat:2 }}</strong>
+                </p>
+            </div>
+            <div class="row mt-5">
+                <div class="col-md-8">
+                    <h3 class="Ordertitle">Shipping Address</h3>
+                    <div class="card">
+                        <div class="card-body">
+                            <p><strong>{{ order.first_name }} {{ order.last_name }}</strong></p>
+                            <p>{{ order.address_line_1 }}</p>
+                            {% if order.address_line_2 %}<p>{{ order.address_line_2 }}</p>{% endif %}
+                            <p>{{ order.city }}, {{ order.postal_code }}</p>
+                            <p>{{ order.country }}</p>
+                            <p><strong>Email:</strong> {{ order.email }}</p>
+                            <p><strong>Phone:</strong> {{ order.phone }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- <section class="get_lattest_section">
+        <div class="container">
+            <div class="get_lattest_inner">
+                <h3>Get The Latest Trends First</h3>
+                <input type="text" placeholder="Enter Your Email">
+                <div class="get_lattest_links">
+                    <a href="#">Facebook</a>
+                    <a href="#">Instagram</a>
+                    <a href="#">Twitter</a>
+                    <a href="#">YouTube</a>
+                    <a href="#">TikTok </a>
+                </div>
+            </div>
+        </div>
+    </section> -->
+
+    <section class="footer_section">
+        <div class="container">
+            <div class="footer_top_txt_main">
+                <div class="footer_top_txt_inner">
+                    <h5>Your Next Look Starts Here</h5>
+                    <h1>Shop the latest collections and own the season.</h1>
+                </div>
+                <div class="footer_top_btns">
+                    <a href="{% url 'marketplace:shop' %}"><button type="button">Shop Now <i class="bi bi-arrow-right"></i></button></a>
+                    <button type="button"><a style="text-decoration: none; color: inherit" href="{% url 'marketplace:home' %}#Contact">Join the Club</a></button>
+                </div>
+            </div>
+            <div class="footer_second_main">
+                <div class="row justify-content-between">
+                    <div class="col-lg-3 col-md-4 col-sm-12">
+                        <div class="footer_sec_txt1">
+                            <img src="{% static 'img/logo2.svg' %}" alt="">
+                            <p>We are a fashion-forward brand dedicated to bringing you timeless designs and modern trends. From everyday essentials to statement pieces.</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-8 col-md-8 col-sm-12">
+                        <div class="row">
+                            <div class="col-lg-3 col-md-6 col-sm-6">
+                                <div class="footer_links_inner">
+                                    <h5>Shop</h5>
+                                    <a href="{% url 'marketplace:shop' %}">All</a>
+                                    <a href="{% url 'marketplace:shop' %}?category=Men">Men</a>
+                                    <a href="{% url 'marketplace:shop' %}?category=Women">Women</a>
+                                    <a href="{% url 'marketplace:shop' %}?category=Accessories">Accessories</a>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-6 col-sm-6">
+                                 <div class="footer_links_inner">
+                                    <h5>Customer Care</h5>
+                                    <a href="{% url 'marketplace:home' %}#Contact">Contach Us</a>
+                                    <a href="{% url 'marketplace:faqs' %}">Shipping & Returns</a>
+                                    <!-- <a href="#">Size Guide</a> -->
+                                    <a href="{% url 'marketplace:faqs' %}">FAQs</a>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-6 col-sm-6">
+                                 <div class="footer_links_inner">
+                                    <h5>About</h5>
+                                    <a href="{% url 'marketplace:privacy' %}">Privacy Policy</a>
+                                    <a href="{% url 'marketplace:terms' %}">Terms of Service</a>
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-md-6 col-sm-6">
+                                 <div class="footer_links_inner">
+                                    <h5>Follow Us</h5>
+                                    
+                                    <a href="https://www.pinterest.com/pandaworld0598/">Pintrest</a>
+                                    <a href="https://www.instagram.com/cashstronomy.clothing.inc/">Instagram</a>
+                                    <a href="https://www.tiktok.com/@Cashstronomy">TikTok</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer_last_main">
+                <p>© 2024 CashstronomyClo. All rights reserved.</p>
+                <div class="footer_last_inner">
+                    <a href="privacy.html">Privacy Policy</a>
+                    <a href="terms.html">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" 
+    integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="{% static 'js/script.js' %}"></script>
+
+    <script>
+        AOS.init({
+            duration: 1200,
+        });
+    </script>
+    
+</body>
+</html>
