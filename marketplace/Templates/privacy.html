@@ -13,7 +13,7 @@
     <link rel="icon" type="image/x-icon" href="{% static 'img/favicon2.svg' %}">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
-<body>
+<audio id="bg-music" src="{% static 'music/bg_music.wav' %}" loop></audio>
 
     <header class="header_section"> 
         <div class="container">
@@ -249,5 +249,27 @@
         });
     </script>
     
+        <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const music = document.getElementById('bg-music');
+            const toggleBtn = document.getElementById('music-toggle-btn');
+
+            if (toggleBtn && music) {
+                const toggleIcon = toggleBtn.querySelector('i');
+
+                toggleBtn.addEventListener('click', function() {
+                    if (music.paused) {
+                        music.play();
+                        toggleIcon.classList.remove('bi-volume-mute-fill');
+                        toggleIcon.classList.add('bi-volume-up-fill');
+                    } else {
+                        music.pause();
+                        toggleIcon.classList.remove('bi-volume-up-fill');
+                        toggleIcon.classList.add('bi-volume-mute-fill');
+                    }
+                });
+            }
+        });
+    </script>
 </body>
 </html>

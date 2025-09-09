@@ -13,7 +13,7 @@
     <link rel="icon" type="image/x-icon" href="{% static 'img/favicon2.svg' %}">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
-<body>
+<audio id="bg-music" src="{% static 'music/bg_music.wav' %}" loop></audio>
     
     <header class="header_section"> 
         <div class="container">
@@ -46,6 +46,9 @@
                                 </li>
                             </ul>
                             <div class="navbtn_main">
+                                 <button type="button" id="music-toggle-btn" class="navbtn" title="Toggle Music">
+                                    <i class="bi bi-volume-mute-fill"></i>
+                                </button>
                                 <a href="{% url 'marketplace:cart' %}"><button type="button" class="navbtn"><img src="{% static 'img/nav1.svg' %}" alt=""></button></a>
                                 <!-- <button type="button" class="navbtn"><img src="{% static 'img/nav2.svg' %}" alt=""></button> -->
                                 <button type="button" class="navbtn d-none"><img src="{% static 'img/nav3.svg' %}" alt=""></button>
@@ -348,6 +351,27 @@
             duration: 1200,
         });
     </script>
-    
+        <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const music = document.getElementById('bg-music');
+            const toggleBtn = document.getElementById('music-toggle-btn');
+
+            if (toggleBtn && music) {
+                const toggleIcon = toggleBtn.querySelector('i');
+
+                toggleBtn.addEventListener('click', function() {
+                    if (music.paused) {
+                        music.play();
+                        toggleIcon.classList.remove('bi-volume-mute-fill');
+                        toggleIcon.classList.add('bi-volume-up-fill');
+                    } else {
+                        music.pause();
+                        toggleIcon.classList.remove('bi-volume-up-fill');
+                        toggleIcon.classList.add('bi-volume-mute-fill');
+                    }
+                });
+            }
+        });
+    </script>
 </body>
 </html>
