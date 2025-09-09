@@ -166,10 +166,10 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER="your-email@gmail.com"
-EMAIL_HOST_PASSWORD="your-google-app-password"
+EMAIL_HOST_USER="ycourtney523@gmail.com"
+EMAIL_HOST_PASSWORD="umyh logo jpiu sqtc"
 
 # Default emails
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
-CONTACT_EMAIL = 'ahmadkashifpool@gmail.com' # The email that receives contact form submissions
+CONTACT_EMAIL = 'Pandaworld@Cashstronomyco.com' # The email that receives contact form submissions
 

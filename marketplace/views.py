@@ -51,7 +51,7 @@ def home(request):
             except Exception as e:
                 messages.error(request, f'Sorry, there was an error sending your message. Please try again later. Error: {e}')
             
-            return redirect('marketplace:home' + '#Contact')
+            return redirect('marketplace:home')
 
     # This part handles the GET request to display the page
     products = Product.objects.filter(display=True).prefetch_related('images')[:4]
