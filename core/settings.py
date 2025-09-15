@@ -128,13 +128,11 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = 'staticfiles/'
 MEDIA_URL = 'media/'
 MEDIA_ROOT = BASE_DIR / 'media' 
 STATIC_ROOT = BASE_DIR / 'staticfiles'
-STATICFILES_DIRS = [
-    BASE_DIR / 'static',
-]
+STATICFILES_DIRS = []
 
 
 # Default primary key field type
@@ -150,9 +148,9 @@ LOGIN_URL = '/login'
 
 
 # In your settings.py
-STRIPE_PUBLISHABLE_KEY="pk_test_51Q8nKP0253g8W7WoBMMcQ5PkGmjNAFUIr51KC2Dipe5082nZtE8hXohqDVHewce2YUZMyMvOr46hrLHrdhDIt4dq001WQCOyAG"
+STRIPE_PUBLISHABLE_KEY="pk_live_51S57VFFMpmAOAnvIcuyPgrIiufLNHgO0Thnfg3hGMINRwXXPdmISWXMRcqubad6EZ70CL6GqTgv7w24ouGamhqKL0002aUQuhP"
 STRIPE_SECRET_KEY = env("STRIPE_SECRET_KEY")
-STRIPE_WEBHOOK_SECRET="whsec_e1140bd1f212e90b662a619c8b029ce42754279b3f674c8e77f31ce2937d03cb"
+STRIPE_WEBHOOK_SECRET="whsec_bJ41ciVLOV8HnEEamqGJxPCxXsEZyUQR"
 
 
 # CashstronomyClo/settings.py
